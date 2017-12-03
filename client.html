@@ -30,7 +30,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">About Us</a></li>
                     <li><a href="#">Stats</a></li>
-                    <li><a href="#" id ="logout">Log out</a></li>
+                    <li><a href="./" id ="logout">Log out</a></li>
 
 
 
@@ -80,8 +80,14 @@ socket.emit('name', "Nik");
 
         $("#logout").click(function () {
             alert("huy")
+            document.cookie="token="+data.authToken;
+         //   window.location.href = "/";
+
+
 
         });
+
+
 
         $("#Name").html(localStorage.getItem("userName"));
         });

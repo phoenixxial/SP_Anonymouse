@@ -148,7 +148,7 @@
                     if(data.message==="success") {
 
                         localStorage.setItem("userName", $("#login").val());
-                        document.cookie="token="+$("#login").val();
+                        document.cookie="token="+data.authToken;
                          window.location.href = "/client";
                     }
                 })

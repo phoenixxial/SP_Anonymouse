@@ -22,7 +22,8 @@ var db = new TransactionDatabase(new sqlite3.Database('Data/Data.db'));
 
 
 app.use(cors());
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({
+    extended:true}));
 
 app.use(bodyParser.json());
 app.use("/assets",express.static(__dirname + '/assets'));
@@ -51,9 +52,11 @@ app.get('/client', function(req, res){
     if(cookies.token === undefined) {
         return res.sendFile(__dirname+'/login.html')
     }
-    //Check if cookie is valid on the server :)
+    else {
+        checkToken(cookies.token,res);
 
-    return res.sendFile(__dirname+'/client.html')
+    }
+    //Check if cookie is valid on the server :)
 
 });
 
@@ -133,7 +136,6 @@ app.post("/signin",function (req,res) {
         var currentQuery = "SELECT* FROM USERS WHERE UserPassword= '"+password+"' AND UserID = '"+ID+"' ";
         db.all(currentQuery,[], function(err, rows) {
 
-            console.log("heya");
             if (rows !== null && rows !== undefined && rows.length !== 0) {
                 registerToken(ID,res);
             }
@@ -177,6 +179,22 @@ function registerToken(userID,res) {
             return res.status(200).json({message: "success",authToken:token});
         }
     });
+}
+
+
+function checkToken(token,res) {
+
+        var currentQuery = "SELECT* FROM USERS WHERE AuthToken = ?";
+        db.all(currentQuery,[token], function(err, rows) {
+            if (rows !== null && rows !== undefined && rows.length !== 0) {
+                return res.sendFile(__dirname + '/client.html')
+
+            }
+            else{
+                return res.sendFile(__dirname + '/login.html')
+            }
+        })
+
 }
 
 
