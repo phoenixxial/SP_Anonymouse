@@ -14,7 +14,7 @@ var async = require('async');
 const uuidv4 = require('uuid/v4');
 
 var cors = require('cors');
-var db = new TransactionDatabase(new sqlite3.Database('ProjectA.db'));
+var db = new TransactionDatabase(new sqlite3.Database('Data/Data.db'));
 
 var app = express();
 
@@ -42,6 +42,62 @@ app.post("/signin", function (req,res) {
 return res.status(200).json({message: "good job"});
 
 });
+
+
+//Registering a new user
+
+app.post("/register", function (req,res) {
+   var {ID, password} = req.body;
+
+   console.log(ID);
+   console.log(password);
+
+
+    if(ID === null || password === null || ID === "" || password === "" || ID === undefined
+        || password === undefined) {
+        return res.status(400).json(
+            {message: "invalid_data"}
+        )
+
+    }
+
+
+    var currentQuery = "SELECT* FROM USERS WHERE UserPassword= '"+password+"' AND UserID = '"+ID+"' ";
+    db.all(currentQuery,[], function(err, rows) {
+        console.log(err);
+
+        console.log("heya");
+        if(rows === null || rows === undefined || rows.length===0) {
+
+
+            var ques = "INSERT INTO Users Values (?,?,?,?)";
+            var data = [ID,password,null];
+            db.run(ques,data,function (err) {
+
+                if(err) {
+                    console.log(err);
+                }
+                else {
+                    console.log("success");
+
+                }
+
+            })
+       }
+       else {
+
+
+
+
+        }
+
+    });
+
+
+
+});
+
+
 
 
 app.get("/login",function (req,res) {
