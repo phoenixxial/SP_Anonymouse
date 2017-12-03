@@ -1,4 +1,6 @@
 var express = require('express');
+var app = express();
+
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
@@ -16,12 +18,18 @@ const uuidv4 = require('uuid/v4');
 var cors = require('cors');
 var db = new TransactionDatabase(new sqlite3.Database('Data/Data.db'));
 
-var app = express();
 
 app.use(cors());
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.use(bodyParser.json());
+app.use("/assets",express.static(__dirname + '/assets'));
+
+app.use(express.static(__dirname + '/node_modules'));
+
+server.listen(3900);
+
+
 
 users = [];
 connections = [];
@@ -35,13 +43,14 @@ app.get('/', function(req, res){
 
 });
 
-
-app.post("/signin", function (req,res) {
-    var {name} = req.body;
-    console.log(name);
-return res.status(200).json({message: "good job"});
+app.get('/client', function(req, res){
+    console.log("haha");
+    return res.sendFile(__dirname+'/client.html')
 
 });
+
+
+
 
 
 //Registering a new user
@@ -64,7 +73,6 @@ app.post("/register", function (req,res) {
 
     var currentQuery = "SELECT* FROM USERS WHERE UserPassword= '"+password+"' AND UserID = '"+ID+"' ";
     db.all(currentQuery,[], function(err, rows) {
-        console.log(err);
 
         console.log("heya");
         if(rows === null || rows === undefined || rows.length===0) {
@@ -100,9 +108,36 @@ app.post("/register", function (req,res) {
 
 
 
-app.get("/login",function (req,res) {
+app.post("/signin",function (req,res) {
 
-    res.sendFile(__dirname+'/client.html');
+    var {ID, password} = req.body;
+
+    if(ID === null || password === null || ID === "" || password === "" || ID === undefined
+        || password === undefined) {
+        return res.status(400).json(
+            {message: "invalid_data"}
+        )
+
+    }
+    else {
+
+        var currentQuery = "SELECT* FROM USERS WHERE UserPassword= '"+password+"' AND UserID = '"+ID+"' ";
+        db.all(currentQuery,[], function(err, rows) {
+
+            console.log("heya");
+            if (rows !== null && rows !== undefined && rows.length !== 0) {
+                res.status(200).json({
+                    message: "success",
+                    token: "blabla",
+                    name: ID
+                })
+            }
+            else{
+
+                res.status(200).json({message: "User not found"});
+            }
+        })
+    }
 });
 
 
@@ -127,11 +162,5 @@ io.on('connection', function(socket){
 
 
 
-var port = process.env.PORT || 3900;
-var server = app.listen(port, function() {
-    console.log("App listening on port"+ port);
-
-
-});
 
 

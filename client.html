@@ -8,8 +8,47 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        @import "/assets/css/Header-Nightsky.css";
+    </style>
 </head>
 <body>
+
+
+<div class="header-nightsky">
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <a class="navbar-brand" id="Home">AnonymousX</a>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Stats</a></li>
+                    <li><a href="#" id ="logout">Log out</a></li>
+
+
+
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="hero">
+        <h1>This is an AnonymousX Game Project</h1>
+        <p>Click "Play" to challenge your knowledge.</p>
+        <div class="btn btn-primary" id ="Play">Play</div>
+    </div>
+</div>
+
+</div>
+<!--
 <div class = "buttonSelect" style="left: 250px; top: 250px; position: absolute">
     <div>
     <button type = "button" class = "btn-primary"style ="height: 100px; width:200px" id="A">answer</button>
@@ -21,6 +60,7 @@
     </div>
 
 </div>
+-->
 
 <script src="/socket.io/socket.io.js"></script>
 <script type = "text/javascript"></script>
@@ -29,11 +69,23 @@
 
 var socket = io();
 
-socket.emit('name' "Nik");
+socket.emit('name', "Nik");
 
 </script>
+<script type="text/javascript">
 
 
+    $("document").ready(function() {
 
+
+        $("#logout").click(function () {
+            alert("huy")
+
+        });
+
+        $("#Name").html(localStorage.getItem("userName"));
+        });
+
+        </script>
 </body>
 </html>

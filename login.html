@@ -113,6 +113,7 @@
 
     </div>
 </div>
+<script src="/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
 
@@ -126,6 +127,7 @@
             $("#exampleModalLong").modal();
 
         });
+
         $("#register").click(function () {
             $.post("/register", {ID:$("#userName").val(), password: $("#pass").val()}, function (res, status) {
 
@@ -138,23 +140,27 @@
 
         $("#OK").click(function () {
 
-            $.post("/signin",{name:"dan"},function(data,status) {
+            $.post("/signin", {ID:$("#login").val(), password: $("#password").val()}, function (data, status,xhr) {
+//document.location.href("http://localhost:3900/client.html")
+
             })
 
-                .done(function(data, status) {
+                .done(function (data, status,xhr) {
+                    if(data.message==="success") {
 
-                    location.href="login"
-
+                        localStorage.setItem("userName", $("#login").val());
+                         window.location.href = "/client";
+                    }
                 })
 
-        .fail(function(jqxhr, settings, ex) {
-            var dan = JSON.parse(jqxhr.responseText);
-            alert(dan.message);
+                .fail(function(jqxhr, settings, ex) {
+                    var dan = JSON.parse(jqxhr.responseText);
+                    alert("error");
+                    alert(dan);
+                })
 
-        })
 
-
-            })
+        });
     });
 
 </script>
