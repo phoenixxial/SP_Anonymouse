@@ -15,6 +15,8 @@ var bodyParser = require('body-parser');
 var async = require('async');
 const uuidv4 = require('uuid/v4');
 
+var cookie = require('cookie');
+
 var cors = require('cors');
 var db = new TransactionDatabase(new sqlite3.Database('Data/Data.db'));
 
@@ -44,7 +46,13 @@ app.get('/', function(req, res){
 });
 
 app.get('/client', function(req, res){
-    console.log("haha");
+    var cookies = cookie.parse(req.headers.cookie);
+
+    if(cookies.token === undefined) {
+        return res.sendFile(__dirname+'/login.html')
+    }
+    //Check if cookie is valid on the server :)
+
     return res.sendFile(__dirname+'/client.html')
 
 });
@@ -58,8 +66,7 @@ app.get('/client', function(req, res){
 app.post("/register", function (req,res) {
    var {ID, password} = req.body;
 
-   console.log(ID);
-   console.log(password);
+
 
 
     if(ID === null || password === null || ID === "" || password === "" || ID === undefined
@@ -108,6 +115,8 @@ app.post("/register", function (req,res) {
 
 
 
+
+
 app.post("/signin",function (req,res) {
 
     var {ID, password} = req.body;
@@ -126,11 +135,7 @@ app.post("/signin",function (req,res) {
 
             console.log("heya");
             if (rows !== null && rows !== undefined && rows.length !== 0) {
-                res.status(200).json({
-                    message: "success",
-                    token: "blabla",
-                    name: ID
-                })
+                registerToken(ID,res);
             }
             else{
 
@@ -155,7 +160,24 @@ io.on('connection', function(socket){
 });
 
 
+function registerToken(userID,res) {
+    var myQuer = 'UPDATE Users SET AuthToken = ?, AuthTokenIssued = ? WHERE UserId = ?';
 
+
+    let token = uuidv4();
+    let date = Date.now();
+    let data = [token,date,userID];
+    db.run(myQuer, data,function(err) {
+        if(err) {
+            return res.status(500).json(
+                {message: "Internal server error"});
+        }
+        else {
+
+            return res.status(200).json({message: "success",authToken:token});
+        }
+    });
+}
 
 
 

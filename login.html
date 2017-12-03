@@ -113,7 +113,6 @@
 
     </div>
 </div>
-<script src="/socket.io/socket.io.js"></script>
 
 <script type="text/javascript">
 
@@ -149,6 +148,7 @@
                     if(data.message==="success") {
 
                         localStorage.setItem("userName", $("#login").val());
+                        document.cookie="token="+$("#login").val();
                          window.location.href = "/client";
                     }
                 })
