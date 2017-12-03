@@ -30,7 +30,7 @@ app.use("/assets",express.static(__dirname + '/assets'));
 
 app.use(express.static(__dirname + '/node_modules'));
 
-server.listen(3900);
+server.listen(process.env.PORT ||3900);
 
 
 
