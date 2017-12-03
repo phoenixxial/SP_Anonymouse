@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body style="background-color: black">
+<div class="container" id = "loginWindow" >
+
+
+    <div class="col-sm-10" style="width: 600px; margin-left:30%; margin-top: 50px">
+        <div class="jumbotron" style=" background-color: rgba(200,0,255,0.8)">
+            <div class="form-group" style="margin-left: -50px">
+                <h1 style="margin-left:35%; user-select:none">Sign In</h1>
+            </div>
+            <hr>
+            <form class="form-horizontal" style="margin-left: 10px">
+                <div class="form-group input-group">
+
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-user"></span>
+
+
+                </span>
+
+                    <input type="text" class="form-control" id = "login"
+                           placeholder="Enter Account ID">
+
+                </div>
+
+
+                <div class="form-group input-group">
+
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-lock"></span>
+
+                </span>
+                    <input type="password" class="form-control" id = "password"
+                           placeholder="password">
+
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox">
+                        Remember me
+                    </label>
+
+                </div>
+                <div class="form-group">
+                    <input type = "button" value="Login" button class="btn btn-primary" id = "OK" style="margin-left: 175px; width: 100px">
+                </div>
+
+
+            </form>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    $("document").ready(function() {
+        $("#OK").click(function () {
+
+            $.post("/signin",{name:"dan"},function(data,status) {
+            })
+
+                .done(function(data, status) {
+
+                    location.href="login"
+
+                })
+
+        .fail(function(jqxhr, settings, ex) {
+            var dan = JSON.parse(jqxhr.responseText);
+            alert(dan.message);
+
+        })
+
+
+            })
+    });
+
+</script>
+
+</body>
+</html>

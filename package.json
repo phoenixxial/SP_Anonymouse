@@ -10,6 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/phoenixxial/SP_Anonymouse.git"
   },
+  "dependencies": {
+    "async": "^2.6.0",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4",
+    "sqlite3": "^3.1.13",
+    "sqlite3-transactions": "0.0.5",
+    "util": "^0.10.3",
+    "uuid": "^3.1.0"
+  },
   "author": "Nik Suprunov",
   "license": "ISC",
   "bugs": {
