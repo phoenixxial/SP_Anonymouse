@@ -140,8 +140,7 @@ app.post("/signin",function (req,res) {
                 registerToken(ID,res);
             }
             else{
-
-                res.status(200).json({message: "User not found"});
+                res.status(421).json({message: "User not found"});
             }
         })
     }

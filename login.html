@@ -8,8 +8,21 @@
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <style>
+
+.lol{
+   /* background: url('./assets/img/sky-night-stars.jpg'); */
+    background-color: #8f8f8f;
+    background-size: cover;
+
+}
+
+
+    </style>
 </head>
-<body style="background-color: black">
+<body class="lol">;
+
 
 
 <!-- MODALS -->
@@ -29,10 +42,6 @@
 
                 <input type="text" id = "pass" placeholder="Password"><br>
 
-
-
-
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -41,6 +50,31 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Message from server</h4>
+            </div>
+            <div class="modal-body" id = "toPutText">
+                <p>Some text in the modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
 
 
 <!--            END MODALS -->
@@ -61,8 +95,8 @@
 <div class="container" id = "loginWindow" >
 
 
-    <div class="col-sm-10" style="width: 600px; margin-left:30%; margin-top: 50px">
-        <div class="jumbotron" style=" background-color: rgba(200,0,255,0.8)">
+    <div class="col-sm-10" style="width: 600px; margin-left:25%; margin-top: 50px">
+        <div class="jumbotron" style=" background-color: rgba(46,255,247,0.8)">
             <div class="form-group" style="margin-left: -50px">
                 <h1 style="margin-left:35%; user-select:none">Sign In</h1>
             </div>
@@ -154,9 +188,11 @@
                 })
 
                 .fail(function(jqxhr, settings, ex) {
+                    //var dan = JSON.parse(jqxhr.responseText);
                     var dan = JSON.parse(jqxhr.responseText);
-                    alert("error");
-                    alert(dan);
+                    $("#toPutText").html("<p>"+dan.message+"</p>");
+                    $("#myModal").modal();
+
                 })
 
 
