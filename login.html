@@ -166,6 +166,24 @@
 
             })
 
+                .done(function (data, status,xhr) {
+                    $("#toPutText").html("<p>"+data.message+"</p>");
+                    $("#myModal").modal();
+
+
+                })
+
+                .fail(function(jqxhr, settings, ex) {
+                    //var dan = JSON.parse(jqxhr.responseText);
+                    var dan = JSON.parse(jqxhr.responseText);
+                    $("#toPutText").html("<p>"+dan.message+"</p>");
+                    $("#myModal").modal();
+
+                })
+
+
+        });
+
         });
 
 
@@ -196,7 +214,7 @@
                 })
 
 
-        });
+
     });
 
 </script>

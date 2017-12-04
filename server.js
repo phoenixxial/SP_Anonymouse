@@ -93,18 +93,18 @@ app.post("/register", function (req,res) {
             db.run(ques,data,function (err) {
 
                 if(err) {
-                    console.log(err);
+                    return res.status(400).json({message: "Internal server error"});
                 }
                 else {
-                    console.log("success");
+                    return res.status(255).json({message: "Account created"});
+
 
                 }
 
             })
        }
        else {
-
-
+return res.status(400).json({message: "User already exists"});
 
 
         }
