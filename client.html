@@ -10,6 +10,17 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style>
         @import "./assets/css/Header-Nightsky.css";
+
+        #question {
+
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+
+        }
+
     </style>
 </head>
 <body>
@@ -40,27 +51,37 @@
             </div>
         </div>
     </nav>
-    <div class="hero">
+
+    <div id = "app">
+    <div class="hero" v-if="!playing" >
         <h1>This is an AnonymousX Game Project</h1>
         <p>Click "Play" to challenge your knowledge.</p>
-        <div class="btn btn-primary" id ="Play">Play</div>
+        <div class="btn btn-primary" id ="Play" @click ="play">Play</div>
     </div>
-</div>
 
-</div>
-<!--
-<div class = "buttonSelect" style="left: 250px; top: 250px; position: absolute">
-    <div>
-    <button type = "button" class = "btn-primary"style ="height: 100px; width:200px" id="A">answer</button>
+
+<div class = "hero" style="left: 250px; top: 250px; position: absolute" v-if="playing" >
+    <textarea id ="question" style="resize: none; width:405px;background-color:rgba(0, 0, 0, 0.1);
+     white-space: normal;
+    text-align: justify;
+    -moz-text-align-last: center; /* Firefox 12+ */
+    text-align-last: center;
+    border-color: red" readonly></textarea>
+<div>
+    <button type = "button" class = "btn-primary"style ="height: 100px; width:200px" id="A" @click="one">answer1</button>
         <button type = "button" class = "btn-primary"style ="height: 100px; width:200px" id="B">answer2</button>
-    </div>
-    <div style="margin-top: 10px">
-        <button type = "button" class = "btn-primary" style ="height: 100px; width:200px" id="C">answer3</button>
-        <button type = "button" class = "btn-primary"style ="height: 100px; width:200px" id="D">answer4</button>
-    </div>
+</div>
+    <div></div>
+        <button type = "button" class = "btn-primary" style ="height: 100px; width:200px; margin-top: 5px" id="C">answer3</button>
+        <button type = "button" class = "btn-primary"style ="height: 100px; width:200px; ; margin-top: 5px" id="D">answer4</button>
+</div>
+    <br>
+    <br>
 
 </div>
--->
+    </div>
+</div>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script type = "text/javascript"></script>
@@ -71,7 +92,39 @@
 
 
 </script>
-<script type="text/javascript">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+<script>
+    var socket = io();
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            playing: false
+
+
+        },
+        methods: {
+            play: function () {
+                this.playing = true;
+                $("#Play").prop('disabled',true);
+                socket.emit('wantToPlay', "Pls");
+                socket.on('info',function (data) {
+                    //receive the message from server
+                    //     alert(data.question);
+
+                })
+
+            },
+            one: function () {
+                alert("pinus");
+            }
+        }
+    });
+
+
+
+
 
 
     $("document").ready(function() {
@@ -87,18 +140,29 @@
 
         });
 
-        $("#Play").click(function () {
+        socket.on('play',function (data) {
+            $("#A").html(data.A);
+            $("#B").html(data.B);
+            $("#C").html(data.C);
+            $("#D").html(data.D);
+            $("#question").html(data.question);
+
+
+
+        });
+
+     /*   $("#Play").click(function () {
             $("#Play").prop('disabled',true);
-            var socket = io();
             socket.emit('wantToPlay', "Pls");
 
             socket.on('info',function (data) {
                 //receive the message from server
-                alert(data);
+           //     alert(data.question);
 
             })
 
         });
+        */
 
 
 

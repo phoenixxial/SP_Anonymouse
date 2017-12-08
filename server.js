@@ -149,6 +149,7 @@ app.post("/signin",function (req,res) {
 
 
 var queueOfPlayers = [];
+var playingPlayers = [];
 
 var SOCKET_LIST = [];
 var count = 0;
@@ -180,10 +181,27 @@ io.on('connection', function(socket){
         }
         else {
 
-            queueOfPlayers[0].emit('info',"ready");
+            playingPlayers.push( queueOfPlayers[0]);
+            playingPlayers.push(socket);
+
+
+
+            var lol = "fjdsiogjdfoigjiodfgjdfgojoidrjgiodfjiogijofd";
+            var object = {question:lol,A:"norm",
+                    B:"good",C:"very good",
+                D:"bad", oponent: "someidiot"
+
+            };
+            socket.emit('play',object);
+            queueOfPlayers[0].emit('play',object);
+
             queueOfPlayers.splice(0);
-            socket.emit('info',"ready");
+
+
+
         }
+
+
 
 
     });
