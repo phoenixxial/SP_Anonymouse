@@ -291,6 +291,30 @@ io.on('connection', function(socket){
 
     socket.on('disconnect', function() {
 
+        var d;
+        for(var i = 0;i<playingPlayers.length;i++)
+        {
+            if (socket.token === playingPlayers[i].token) {
+                d = i;
+                break;
+            }
+                }
+
+
+                if(d=>0 && d<playingPlayers.length) {
+var m;
+            for(var k = 0; k<playingPlayers.length;k++) {
+                if(playingPlayers[d].opponent === playingPlayers[k].name) {
+                    playingPlayers[k].emit('next', {finale:"You won!"});
+                    playingPlayers.splice(k,1);
+                    break;
+                }
+            }
+            playingPlayers.splice(d,1);
+
+
+        }
+
         console.log("user disconnected")
 
     });
