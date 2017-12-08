@@ -147,8 +147,19 @@ app.post("/signin",function (req,res) {
 });
 
 
-io.on('connection', function(socket){
 
+var queueOfPlayers = [];
+
+var SOCKET_LIST = [];
+var count = 0;
+
+
+io.on('connection', function(socket){
+    socket.id = Math.random();
+    socket.score = 0;
+
+
+  //  socket.emit('info', {opponent:"lol"};)
 
     console.log('a user connected');
 
@@ -158,7 +169,31 @@ io.on('connection', function(socket){
 
     });
 
+    socket.on('wantToPlay',function (data) {
+        var cookies = cookie.parse(socket.request.headers.cookie);
+        socket.token = cookies.token;
+        console.log(queueOfPlayers.length)
+
+        if(queueOfPlayers.length === 0) {
+
+            queueOfPlayers.push(socket);
+        }
+        else {
+
+            queueOfPlayers[0].emit('info',"ready");
+            queueOfPlayers.splice(0);
+            socket.emit('info',"ready");
+        }
+
+
+    });
+
+    socket.emit('serverMsg', "hey")
+
 });
+
+
+
 
 
 function registerToken(userID,res) {

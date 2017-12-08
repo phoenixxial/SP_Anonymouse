@@ -67,9 +67,8 @@
 
 <script>
 
-var socket = io();
 
-socket.emit('name', "Nik");
+
 
 </script>
 <script type="text/javascript">
@@ -78,11 +77,26 @@ socket.emit('name', "Nik");
     $("document").ready(function() {
 
 
+
+
         $("#logout").click(function () {
             document.cookie="token="+data.authToken;
          //   window.location.href = "/";
 
 
+
+        });
+
+        $("#Play").click(function () {
+            $("#Play").prop('disabled',true);
+            var socket = io();
+            socket.emit('wantToPlay', "Pls");
+
+            socket.on('info',function (data) {
+                //receive the message from server
+                alert(data);
+
+            })
 
         });
 
