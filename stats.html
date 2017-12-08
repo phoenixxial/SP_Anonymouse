@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AnonymousX</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        @import "./assets/css/Header-Nightsky.css";
+
+        #question {
+
+            -moz-user-select: none;
+            -khtml-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+
+        }
+        .entring{
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .matches{
+
+            position: relative;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div class="header-nightsky">
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <a class="navbar-brand" href="./client" id="Home">AnonymousX</a>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"id="about">About Us</a></li>
+                    <li><a href="./stats.html">Stats</a></li>
+                    <li><a href="./" id ="logout">Log out</a></li>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id = "app" style="margin-top: 50px;left: 35%; position: absolute">
+
+
+        <div class= "adding" v-if="admin" style="color: black" >
+
+            <textarea id="quest" class="entring" placeholder="Question" style="resize: none; width: 200px; height: 60px; left: -20px"></textarea><br>
+            <input type="text" id="A"class="entring"style="margin-top: 25px; position: relative" placeholder="A"><br>
+            <input type="text" class="entring" id="B" placeholder="B"><br>
+            <input type="text" class="entring"id="C" placeholder="C"><br>
+            <input type="text" class="entring" id="D" placeholder="D"><br>
+            <input type="text" class="entring" id="ans"placeholder="Answer"><br>
+
+
+            <input type="button"value="Submit" id="submit" @click = "submita" class="btn-info" style="margin-top: 10px;left: 35px;position: absolute">
+
+
+        </div>
+<div v-if="!admin" >
+    <h1 id ="brand" style="color: #7a60e9;position: relative">Statistics</h1></br>
+        <h style="left:10px;position:relative;color: #7a60e9">Last 20 Matches</h></br>
+
+
+
+
+        <div class = "matches" v-for="one in hist">
+        <h style="font-weight:bold;width: 200px; position: absolute"> {{one.FIRST}}   &nbsp  &nbsp  {{one.SCORE}}:{{one.SCORE2}}&nbsp  &nbsp   {{one.SECOND}} </h>
+    </br>
+    </div>
+</div>
+    </div>
+
+
+</div>
+
+
+
+
+<script type = "text/javascript"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
+<script>
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            hist:[],
+            admin:false
+
+
+        },
+        methods: {
+            submita: function () {
+
+                var url9 = "./new";
+
+                $.post(url9,{quest:$("#quest").val(), A: $("#A").val(),
+                    B: $("#B").val(),C: $("#C").val(),D: $("#D").val(),ans:$("#ans").val() },function (data,status) {
+
+                    alert(data.message);
+
+                })
+
+            }
+
+
+        }
+    });
+
+
+
+
+
+
+    $("document").ready(function() {
+        $("#brand").html("Statistics of "+localStorage.getItem("userName"));
+
+
+        var url7 = "./admin";
+
+        $.get(url7,{},function (data,status,xhr) {
+
+            if(data.message === "admin") {
+
+                app.admin = true;
+            }
+
+        });
+
+        var url = "./history";
+$.get(url,{name:localStorage.getItem("userName")},function (data,status,xhr) {
+app.hist = data;
+});
+
+
+
+
+
+        $("#logout").click(function () {
+            document.cookie="token="+data.authToken;
+
+            //   window.location.href = "/";
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    });
+
+</script>
+</body>
+</html>

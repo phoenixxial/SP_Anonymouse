@@ -38,6 +38,54 @@ users = [];
 connections = [];
 
 
+app.post('/new',function (req,res) {
+
+ {
+    var{quest,A,B,C,D,ans} = req.body;
+
+    var query = "INSERT INTO QUESTIONS VALUES (?,?,?,?,?,?)";
+     var data = [quest,A,B,C,D,ans];
+     console.log("her");
+     db.run(query,data,function (err,rows) {
+         console.log("her");
+
+
+         res.status(255).json({message: "success!"});
+     })
+
+     }
+
+});
+
+
+app.get('/admin',function (req,res) {
+
+    var cookies = cookie.parse(req.headers.cookie);
+
+    if (cookies.token === undefined) {
+        return res.sendFile(__dirname + '/login.html')
+    }
+    else {
+        var que = "SELECT* " +
+            "FROM USERS WHERE AuthToken = ?";
+console.log(cookies.token);
+        db.all(que,[cookies.token],function (err,rows) {
+            if(rows!== undefined && rows!== null && rows[0].ACCESS===2) {
+                console.log("huy");
+                res.status(255).json({message:"admin"});
+            }
+            else {
+                res.status(256).json({message:"user"});
+
+            }
+
+        })
+
+    }
+
+});
+
+
 
 
 app.get('/', function(req, res){
@@ -46,6 +94,32 @@ app.get('/', function(req, res){
 
 });
 
+
+app.get('/history', function(req, res) {
+    var cookies = cookie.parse(req.headers.cookie);
+
+    if (cookies.token === undefined) {
+        return res.sendFile(__dirname + '/login.html')
+    }
+
+    else {
+
+        var {name} = req.query;
+
+
+        var que = "SELECT* FROM HISTORY WHERE FIRST = ? OR SECOND = ? LIMIT 20"
+
+        db.all(que,[name,name],function (err,rows) {
+            return res.status(200).json(rows);
+
+        })
+
+
+    }
+});
+
+
+
 app.get('/client', function(req, res){
     var cookies = cookie.parse(req.headers.cookie);
 
@@ -53,10 +127,26 @@ app.get('/client', function(req, res){
         return res.sendFile(__dirname+'/login.html')
     }
     else {
-        checkToken(cookies.token,res);
+        checkToken(cookies.token,res,"/client.html");
 
     }
     //Check if cookie is valid on the server :)
+
+});
+
+
+app.get('/stats.html',function (req,res) {
+
+
+    var cookies = cookie.parse(req.headers.cookie);
+
+    if(cookies.token === undefined) {
+        return res.sendFile(__dirname+'/login.html')
+    }
+    else {
+        checkToken(cookies.token,res,"/stats.html");
+
+    }
 
 });
 
@@ -156,6 +246,24 @@ var count = 0;
 
 
 io.on('connection', function(socket){
+
+
+
+    var cookies = cookie.parse(socket.request.headers.cookie);
+    if(queueOfPlayers[0]!== undefined && queueOfPlayers[0].token === cookies.token ) {
+
+        return;
+
+    }
+
+
+    for(var k = 0; k < playingPlayers.length; k++) {
+        if(playingPlayers[k].token === cookies.token) {
+            return;
+
+        }
+    }
+
     socket.id = Math.random();
     socket.score = 0;
 
@@ -274,12 +382,27 @@ io.on('connection', function(socket){
 
 
 
+
+
             playingPlayers[index2].emit('next',{finale:toSend2});
             playingPlayers[index].emit('next',{finale:toSend1})
 
+
+            var seq = "INSERT INTO HISTORY VALUES(?,?,?,?)";
+            var data = [  playingPlayers[index].name,   playingPlayers[index2].name,   playingPlayers[index].score,
+                playingPlayers[index2].score];
+
+
+            db.run(seq,data,function(data,err) {
+
+
+            });
+
+
+
+
             playingPlayers.splice(index2,1);
             playingPlayers.splice(index,1);
-            console.log(playingPlayers.length);
 
             //  playingPlayers[index].emit('next', {score:playingPlayers[index].score})
 
@@ -472,7 +595,6 @@ else        if(playingPlayers[index].B===true && playingPlayers[index2].B===true
 
     });
 
-    socket.emit('serverMsg', "hey")
 
 });
 
@@ -500,16 +622,16 @@ function registerToken(userID,res) {
 }
 
 
-function checkToken(token,res) {
+function checkToken(token,res,stringa) {
 
         var currentQuery = "SELECT* FROM USERS WHERE AuthToken = ?";
         db.all(currentQuery,[token], function(err, rows) {
             if (rows !== null && rows !== undefined && rows.length !== 0) {
-                return res.sendFile(__dirname + '/client.html')
+                return res.sendFile(__dirname + stringa)
 
             }
             else{
-                return res.sendFile(__dirname + '/login.html')
+                return res.sendFile(__dirname + './')
             }
         })
 

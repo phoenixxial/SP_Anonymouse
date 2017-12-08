@@ -29,7 +29,7 @@
 <div class="header-nightsky">
     <nav class="navbar navbar-default">
         <div class="container">
-            <a class="navbar-brand" id="Home">AnonymousX</a>
+            <a class="navbar-brand" href="./" id="Home">AnonymousX</a>
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                     <span class="icon-bar"></span>
@@ -40,7 +40,7 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">About Us</a></li>
-                    <li><a href="#">Stats</a></li>
+                    <li><a href="./stats.html" id="stats">Stats</a></li>
                     <li><a href="./" id ="logout">Log out</a></li>
 
 
@@ -132,17 +132,38 @@
             one: function () {
 
                 socket.emit('submit',{ans:1})
+                $("#A").prop('disabled',true);
+                $("#B").prop('disabled',true);
+                $("#C").prop('disabled',true);
+                $("#D").prop('disabled',true);
+
+
+
+
+
             },
             two: function () {
                 socket.emit('submit',{ans:2})
+                $("#A").prop('disabled',true);
+                $("#B").prop('disabled',true);
+                $("#C").prop('disabled',true);
+                $("#D").prop('disabled',true);
 
             },
             three: function () {
                 socket.emit('submit',{ans:3})
+                $("#A").prop('disabled',true);
+                $("#B").prop('disabled',true);
+                $("#C").prop('disabled',true);
+                $("#D").prop('disabled',true);
 
             },
             four: function () {
                 socket.emit('submit',{ans:4})
+                $("#A").prop('disabled',true);
+                $("#B").prop('disabled',true);
+                $("#C").prop('disabled',true);
+                $("#D").prop('disabled',true);
             }
 
         }
@@ -165,11 +186,24 @@
 
 
         });
+        $("#logout").click(function () {
+            document.cookie="token="+data.authToken;
+            //   window.location.href = "/";
+
+
+
+        });
+
+
 
 
 
 
         socket.on('next',function(data) {
+            $("#A").prop('disabled',false);
+            $("#B").prop('disabled',false);
+            $("#C").prop('disabled',false);
+            $("#D").prop('disabled',false);
 
             if(data.finale!==undefined && data.finale!==null) {
                 alert(data.finale);
