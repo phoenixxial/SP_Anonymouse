@@ -582,7 +582,7 @@ else        if(playingPlayers[index].B===true && playingPlayers[index2].B===true
                 socket.emit('play',object);
                 queueOfPlayers[0].emit('play',object2);
 
-                queueOfPlayers.splice(0);
+                queueOfPlayers.splice(0,1);
 
 
             });
