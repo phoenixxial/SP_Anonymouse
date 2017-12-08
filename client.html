@@ -11,6 +11,32 @@
     <style>
         @import "./assets/css/Header-Nightsky.css";
 
+
+
+
+        @keyframes spinner {
+            to {transform: rotate(360deg);}
+        }
+
+        .spinner:before {
+            content: '';
+            box-sizing: border-box;
+            position: absolute;
+            top: 45%;
+            left: 45%;
+            width: 35px;
+            height: 35px;
+            margin-top: -15px;
+            margin-left: -15px;
+            border-radius: 65%;
+            border: 1px solid #ccc;
+            border-top-color: #07d;
+            z-index: 99999;
+            animation: spinner .6s linear infinite;
+        }
+
+
+
         #question {
 
             -moz-user-select: none;
@@ -68,7 +94,7 @@
     </div>
 
 
-    <div style="position: absolute; left: 550px; top: -100px">
+    <div style="position: absolute; left: 550px; top: -100px ">
         <label id="opponent">Opponent</label><br>
         Score: <label id="hisScore"></label>
     </div>
@@ -119,6 +145,8 @@
         },
         methods: {
             play: function () {
+                $("#app").addClass('spinner');
+
                 this.playing = true;
                 $("#Play").prop('disabled',true);
                 socket.emit('wantToPlay', localStorage.getItem("userName"));
@@ -130,6 +158,7 @@
 
             },
             one: function () {
+                $("#app").addClass('spinner');
 
                 socket.emit('submit',{ans:1})
                 $("#A").prop('disabled',true);
@@ -143,6 +172,8 @@
 
             },
             two: function () {
+                $("#app").addClass('spinner');
+
                 socket.emit('submit',{ans:2})
                 $("#A").prop('disabled',true);
                 $("#B").prop('disabled',true);
@@ -151,6 +182,8 @@
 
             },
             three: function () {
+                $("#app").addClass('spinner');
+
                 socket.emit('submit',{ans:3})
                 $("#A").prop('disabled',true);
                 $("#B").prop('disabled',true);
@@ -159,7 +192,10 @@
 
             },
             four: function () {
+                $("#app").addClass('spinner');
+
                 socket.emit('submit',{ans:4})
+
                 $("#A").prop('disabled',true);
                 $("#B").prop('disabled',true);
                 $("#C").prop('disabled',true);
@@ -194,6 +230,8 @@
 
 
         socket.on('next',function(data) {
+            $("#app").removeClass('spinner');
+
             $("#A").prop('disabled',false);
             $("#B").prop('disabled',false);
             $("#C").prop('disabled',false);
@@ -208,8 +246,8 @@
                 $("#C").html(data.C);
                 $("#D").html(data.D);
                 $("#question").html(data.question);
-                $("#hisScore").html(data.hisScore);
-                $("#yourScore").html(data.yourScore);
+                $("#hisScore").text(data.hisScore);
+                $("#yourScore").text(data.yourScore);
             }
 
         });
@@ -217,6 +255,8 @@
 
 
         socket.on('play',function (data) {
+            $("#app").removeClass('spinner');
+
             $("#A").html(data.A);
             $("#B").html(data.B);
             $("#C").html(data.C);
