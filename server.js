@@ -411,6 +411,12 @@ io.on('connection', function(socket){
                 playingPlayers[index2].score];
 
 
+
+            playingPlayers.splice(index2,1);
+            playingPlayers.splice(index,1);
+            console.log(playingPlayers.length)
+            console.log(queueOfPlayers.length)
+
             db.run(seq,data,function(data,err) {
 
 
@@ -419,8 +425,7 @@ io.on('connection', function(socket){
 
 
 
-            playingPlayers.splice(index2,1);
-            playingPlayers.splice(index,1);
+
 
             //  playingPlayers[index].emit('next', {score:playingPlayers[index].score})
 
@@ -594,7 +599,7 @@ else        if(playingPlayers[index].B===true && playingPlayers[index2].B===true
                 socket.emit('play',object);
                 queueOfPlayers[0].emit('play',object2);
 
-                queueOfPlayers.splice(0,1);
+                queueOfPlayers=[]
 
 
             });
