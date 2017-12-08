@@ -64,6 +64,18 @@ app.post('/new',function (req,res) {
 });
 
 
+app.get('/about',function (req,res) {
+    var cookies = cookie.parse(req.headers.cookie);
+
+    if (cookies.token === undefined) {
+        return res.sendFile(__dirname + '/login.html')
+    }
+    else {
+        return res.sendFile(__dirname + '/aboutme.html')
+
+    }
+})
+
 app.get('/admin',function (req,res) {
 
     var cookies = cookie.parse(req.headers.cookie);
@@ -105,7 +117,7 @@ app.get('/history', function(req, res) {
     var cookies = cookie.parse(req.headers.cookie);
 
     if (cookies.token === undefined) {
-        return res.sendFile(__dirname + '/login')
+        return res.sendFile(__dirname + '/login.html')
     }
 
     else {

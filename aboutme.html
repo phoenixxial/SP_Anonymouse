@@ -60,38 +60,16 @@
         </div>
     </nav>
 
-    <div id = "app" style="margin-top: 50px;left: 35%; position: absolute">
 
 
-        <div class= "adding" v-if="admin" style="color: black" >
+<div class="hero" >
+    <h1>This Project was built to satisfy the needs of those who want to shine with their knowledge.
+    Project currently supports CS students only but is a part of agenda, to add more categories of questions.
 
-            <textarea id="quest" class="entring" placeholder="Question" style="resize: none; width: 200px; height: 60px; left: -20px"></textarea><br>
-            <input type="text" id="A"class="entring"style="margin-top: 25px; position: relative" placeholder="A"><br>
-            <input type="text" class="entring" id="B" placeholder="B"><br>
-            <input type="text" class="entring"id="C" placeholder="C"><br>
-            <input type="text" class="entring" id="D" placeholder="D"><br>
-            <input type="text" class="entring" id="ans"placeholder="Answer"><br>
+    </h1>
 
 
-            <input type="button"value="Submit" id="submit" @click = "submita" class="btn-info" style="margin-top: 10px;left: 35px;position: absolute">
-
-
-        </div>
-<div v-if="!admin" >
-    <h1 id ="brand" style="color: #7a60e9;position: relative">Statistics</h1></br>
-        <h style="left:10px;position:relative;color: #7a60e9">Last 20 Matches</h></br>
-
-
-
-
-        <div class = "matches" v-for="one in hist">
-        <h style="font-weight:bold;width: 200px; position: absolute"> {{one.FIRST}}   &nbsp  &nbsp  {{one.SCORE}}:{{one.SCORE2}}&nbsp  &nbsp   {{one.SECOND}} </h>
-    </br>
-    </div>
 </div>
-    </div>
-
-
 </div>
 
 
@@ -112,22 +90,7 @@
 
 
         },
-        methods: {
-            submita: function () {
 
-                var url9 = "./new";
-
-                $.post(url9,{quest:$("#quest").val(), A: $("#A").val(),
-                    B: $("#B").val(),C: $("#C").val(),D: $("#D").val(),ans:$("#ans").val() },function (data,status) {
-
-                    alert(data.message);
-
-                })
-
-            }
-
-
-        }
     });
 
 
@@ -136,37 +99,7 @@
 
 
     $("document").ready(function() {
-        $("#brand").html("Statistics of "+localStorage.getItem("userName"));
-
-
-        var url7 = "./admin";
-
-        $.get(url7,{},function (data,status,xhr) {
-
-            if(data.message === "admin") {
-
-                app.admin = true;
-            }
-
-        });
-
-        var url = "./history";
-$.get(url,{name:localStorage.getItem("userName")},function (data,status,xhr) {
-app.hist = data;
-});
-
-
-
-
-
-        $("#logout").click(function () {
-            document.cookie="token="+data.authToken;
-
-            //   window.location.href = "/";
-
-
-
-        });
+    })
 
 
 
@@ -179,8 +112,6 @@ app.hist = data;
 
 
 
-
-    });
 
 </script>
 </body>
