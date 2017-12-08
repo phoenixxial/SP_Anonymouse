@@ -223,12 +223,36 @@ io.on('connection', function(socket){
         for(var i = 0; i<playingPlayers.length;i++) {
 
             if(opp === playingPlayers[i].name) {
-                console.log("found!");
                 index2= i;
                 break;
             }
         }
 
+
+
+
+
+        if(playingPlayers[index].D===true &&  playingPlayers[index2].D===true ){
+
+
+
+            playingPlayers[index2].emit('next');
+          //  playingPlayers[index].emit('next', {score:playingPlayers[index].score})
+
+        }
+
+       else if(playingPlayers[index].C===true && playingPlayers[index2].C===true ) {
+
+        }
+
+
+else        if(playingPlayers[index].B===true && playingPlayers[index2].B===true) {
+
+        }
+
+     else   if(playingPlayers[index].A===true && playingPlayers[index2].A===true) {
+
+        }
 
 
 
@@ -258,29 +282,49 @@ io.on('connection', function(socket){
             queueOfPlayers.push(socket);
         }
         else {
+
+
             queueOfPlayers[0].opponent = socket.name;
             socket.opponent = queueOfPlayers[0].name;
-            playingPlayers.push( queueOfPlayers[0]);
-            playingPlayers.push(socket);
 
 
 
 
-            var lol = "fjdsiogjdfoigjiodfgjdfgojoidrjgiodfjiogijofd";
-            var object = {question:lol,A:"norm",
-                    B:"good",C:"very good",
-                D:"bad", opponent: queueOfPlayers[0].name
-
-            };
-            var object2 = {question:lol,A:"norm",
-                B:"good",C:"very good",
-                D:"bad", opponent: socket.name};
+            var quer = "SELECT* FROM Questions ORDER BY RANDOM() LIMIT 1 ";
 
 
-            socket.emit('play',object);
-            queueOfPlayers[0].emit('play',object2);
+            db.all(quer, [],function (err, rows) {
 
-            queueOfPlayers.splice(0);
+
+
+                var lol = "fjdsiogjdfoigjiodfgjdfgojoidrjgiodfjiogijofd";
+                var object = {question:rows[0].Question,A:rows[0].A,
+                    B:rows[0].B,C:rows[0].C,
+                    D:rows[0].D, opponent: queueOfPlayers[0].name
+
+                };
+                var object2 = {question:rows[0].Question,A:rows[0].A,
+                    B:rows[0].B,C:rows[0].C,
+                    D:rows[0].D, opponent: socket.name};
+
+                queueOfPlayers[0].answer = rows[0].ANSWER;
+                socket.answer=rows[0].ANSWER;
+
+                playingPlayers.push( queueOfPlayers[0]);
+                playingPlayers.push(socket);
+
+                socket.emit('play',object);
+                queueOfPlayers[0].emit('play',object2);
+
+                queueOfPlayers.splice(0);
+
+
+            });
+
+
+
+
+
 
 
 
