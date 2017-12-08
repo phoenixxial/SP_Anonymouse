@@ -176,7 +176,7 @@ io.on('connection', function(socket){
 
         var cookies = cookie.parse(socket.request.headers.cookie);
 
-        var index;
+        var index=-1;
         for(var i = 0; i<playingPlayers.length;i++) {
 
             if(cookies.token === playingPlayers[i].token) {
@@ -188,7 +188,7 @@ io.on('connection', function(socket){
         }
 
 
-        if(index>=playingPlayers.length) {
+        if(index>=playingPlayers.length || index <0) {
 
             //Somebody tries to hack in to my app.
                 return;
@@ -246,10 +246,42 @@ io.on('connection', function(socket){
 
         if(playingPlayers[index].D===true &&  playingPlayers[index2].D===true ){
 
-console.log("I am here, bro");
 
-            playingPlayers[index2].emit('next');
-          //  playingPlayers[index].emit('next', {score:playingPlayers[index].score})
+
+
+            const message1 = "victory";
+            const message2 = "defeat";
+            const message3 = "draw";
+
+            var toSend1;
+            var toSend2;
+
+            if(playingPlayers[index].score>playingPlayers[index2].score) {
+                toSend1 = message1;
+                toSend2 = message2;
+
+            }
+            else if(playingPlayers[index2].score >playingPlayers[index].score) {
+                toSend1 = message2;
+                toSend2 = message1;
+
+            }
+            else {
+                toSend1 = message3;
+                toSend2 = message3;
+            }
+
+
+
+
+            playingPlayers[index2].emit('next',{finale:toSend2});
+            playingPlayers[index].emit('next',{finale:toSend1})
+
+            playingPlayers.splice(index2,1);
+            playingPlayers.splice(index,1);
+            console.log(playingPlayers.length);
+
+            //  playingPlayers[index].emit('next', {score:playingPlayers[index].score})
 
         }
 
