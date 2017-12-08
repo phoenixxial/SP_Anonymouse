@@ -170,30 +170,115 @@ io.on('connection', function(socket){
 
     });
 
+
+
+    socket.on('submit',function (data) {
+
+        var cookies = cookie.parse(socket.request.headers.cookie);
+
+        var index;
+        for(var i = 0; i<playingPlayers.length;i++) {
+
+            if(cookies.token === playingPlayers[i].token) {
+                index= i;
+                break;
+
+
+            }
+        }
+
+
+        if(index>=playingPlayers.length) {
+
+            //Somebody tries to hack in to my app.
+                return;
+        }
+
+        if(playingPlayers[index].num ===1) {
+            playingPlayers[index].A = true;
+            playingPlayers[index].num++;
+
+        }
+        else if(playingPlayers[index].num ===2) {
+            playingPlayers[index].B=true;
+            playingPlayers[index].num++;
+
+
+        }
+        else if(playingPlayers[index].num ===3) {
+            playingPlayers[index].C=true;
+            playingPlayers[index].num++;
+
+
+        }
+        else if(playingPlayers[index].num ===4) {
+            playingPlayers[index].num++;
+            playingPlayers[index].D=true;
+
+        }
+
+        var index2;
+
+        var opp = playingPlayers[index].opponent;
+        for(var i = 0; i<playingPlayers.length;i++) {
+
+            if(opp === playingPlayers[i].name) {
+                console.log("found!");
+                index2= i;
+                break;
+            }
+        }
+
+
+
+
+
+
+    });
+
     socket.on('wantToPlay',function (data) {
+        socket.name = data;
+
+        socket.score =0;
+
+        socket.num = 1;
+
+        socket.A=false;
+        socket.B=false;
+        socket.C=false;
+        socket.D=false;
+
+
         var cookies = cookie.parse(socket.request.headers.cookie);
         socket.token = cookies.token;
-        console.log(queueOfPlayers.length)
+        console.log(queueOfPlayers.length);
 
         if(queueOfPlayers.length === 0) {
 
             queueOfPlayers.push(socket);
         }
         else {
-
+            queueOfPlayers[0].opponent = socket.name;
+            socket.opponent = queueOfPlayers[0].name;
             playingPlayers.push( queueOfPlayers[0]);
             playingPlayers.push(socket);
+
 
 
 
             var lol = "fjdsiogjdfoigjiodfgjdfgojoidrjgiodfjiogijofd";
             var object = {question:lol,A:"norm",
                     B:"good",C:"very good",
-                D:"bad", oponent: "someidiot"
+                D:"bad", opponent: queueOfPlayers[0].name
 
             };
+            var object2 = {question:lol,A:"norm",
+                B:"good",C:"very good",
+                D:"bad", opponent: socket.name};
+
+
             socket.emit('play',object);
-            queueOfPlayers[0].emit('play',object);
+            queueOfPlayers[0].emit('play',object2);
 
             queueOfPlayers.splice(0);
 

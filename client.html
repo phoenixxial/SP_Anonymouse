@@ -60,7 +60,20 @@
     </div>
 
 
-<div class = "hero" style="left: 250px; top: 250px; position: absolute" v-if="playing" >
+<div class = "hero" style="left: 250px; top:
+250px; position: absolute" v-if="playing" >
+    <div style="position: absolute; left: -200px; top: -100px">
+    <label id>You</label><br>
+    Score: <label id="yourScore"></label>
+    </div>
+
+
+    <div style="position: absolute; left: 550px; top: -100px">
+        <label id="opponent">Opponent</label><br>
+        Score: <label id="hisScore"></label>
+    </div>
+
+
     <textarea id ="question" style="resize: none; width:405px;background-color:rgba(0, 0, 0, 0.1);
      white-space: normal;
     text-align: justify;
@@ -108,7 +121,7 @@
             play: function () {
                 this.playing = true;
                 $("#Play").prop('disabled',true);
-                socket.emit('wantToPlay', "Pls");
+                socket.emit('wantToPlay', localStorage.getItem("userName"));
                 socket.on('info',function (data) {
                     //receive the message from server
                     //     alert(data.question);
@@ -117,7 +130,8 @@
 
             },
             one: function () {
-                alert("pinus");
+
+                socket.emit('submit',{ans:1})
             }
         }
     });
@@ -146,6 +160,7 @@
             $("#C").html(data.C);
             $("#D").html(data.D);
             $("#question").html(data.question);
+            $("#opponent").html(data.opponent)
 
 
 
