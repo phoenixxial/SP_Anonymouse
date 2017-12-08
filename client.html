@@ -82,11 +82,11 @@
     border-color: red" readonly></textarea>
 <div>
     <button type = "button" class = "btn-primary"style ="height: 100px; width:200px" id="A" @click="one">answer1</button>
-        <button type = "button" class = "btn-primary"style ="height: 100px; width:200px" id="B">answer2</button>
+        <button type = "button" class = "btn-primary"style ="height: 100px; width:200px" id="B"@click = "two">answer2</button>
 </div>
     <div></div>
-        <button type = "button" class = "btn-primary" style ="height: 100px; width:200px; margin-top: 5px" id="C">answer3</button>
-        <button type = "button" class = "btn-primary"style ="height: 100px; width:200px; ; margin-top: 5px" id="D">answer4</button>
+        <button type = "button" class = "btn-primary" style ="height: 100px; width:200px; margin-top: 5px" id="C" @click ="three">answer3</button>
+        <button type = "button" class = "btn-primary"style ="height: 100px; width:200px; ; margin-top: 5px" id="D" @click = "four">answer4</button>
 </div>
     <br>
     <br>
@@ -132,7 +132,19 @@
             one: function () {
 
                 socket.emit('submit',{ans:1})
+            },
+            two: function () {
+                socket.emit('submit',{ans:2})
+
+            },
+            three: function () {
+                socket.emit('submit',{ans:3})
+
+            },
+            four: function () {
+                socket.emit('submit',{ans:4})
             }
+
         }
     });
 
@@ -153,6 +165,22 @@
 
 
         });
+
+
+
+
+        socket.on('next',function(data) {
+            $("#A").html(data.A);
+            $("#B").html(data.B);
+            $("#C").html(data.C);
+            $("#D").html(data.D);
+            $("#question").html(data.question);
+            $("#hisScore").html(data.hisScore);
+            $("#yourScore").html(data.yourScore);
+
+        });
+
+
 
         socket.on('play',function (data) {
             $("#A").html(data.A);

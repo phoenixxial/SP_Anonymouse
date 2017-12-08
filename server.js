@@ -195,23 +195,35 @@ io.on('connection', function(socket){
         }
 
         if(playingPlayers[index].num ===1) {
+            if(data.ans ===playingPlayers[index].answer) {
+                playingPlayers[index].score++;
+            }
             playingPlayers[index].A = true;
             playingPlayers[index].num++;
 
         }
         else if(playingPlayers[index].num ===2) {
+            if(data.ans ===playingPlayers[index].answer) {
+                playingPlayers[index].score++;
+            }
             playingPlayers[index].B=true;
             playingPlayers[index].num++;
 
 
         }
         else if(playingPlayers[index].num ===3) {
+            if(data.ans ===playingPlayers[index].answer) {
+                playingPlayers[index].score++;
+            }
             playingPlayers[index].C=true;
             playingPlayers[index].num++;
 
 
         }
         else if(playingPlayers[index].num ===4) {
+            if(data.ans ===playingPlayers[index].answer) {
+                playingPlayers[index].score++;
+            }
             playingPlayers[index].num++;
             playingPlayers[index].D=true;
 
@@ -234,23 +246,116 @@ io.on('connection', function(socket){
 
         if(playingPlayers[index].D===true &&  playingPlayers[index2].D===true ){
 
-
+console.log("I am here, bro");
 
             playingPlayers[index2].emit('next');
           //  playingPlayers[index].emit('next', {score:playingPlayers[index].score})
 
         }
 
-       else if(playingPlayers[index].C===true && playingPlayers[index2].C===true ) {
+       else if(playingPlayers[index].C===true && playingPlayers[index2].C===true &&(playingPlayers[index].D!==true)) {
+
+
+
+            var quer = "SELECT* FROM Questions ORDER BY RANDOM() LIMIT 1 ";
+
+
+            db.all(quer, [],function (err, rows) {
+
+
+                var object = {
+                    question: rows[0].Question, A: rows[0].A,
+                    B: rows[0].B, C: rows[0].C,
+                    D: rows[0].D, yourScore: playingPlayers[index].score,
+                    hisScore: playingPlayers[index2].score
+
+                };
+                var object2 = {
+                    question: rows[0].Question, A: rows[0].A,
+                    B: rows[0].B, C: rows[0].C,
+                    D: rows[0].D, yourScore: playingPlayers[index2].score,
+                    hisScore: playingPlayers[index].score
+                };
+
+                playingPlayers[index2].answer = rows[0].ANSWER;
+                playingPlayers[index].answer = rows[0].ANSWER;
+
+                playingPlayers[index].emit('next', object);
+                playingPlayers[index2].emit('next', object2);
+
+            })
+
+
 
         }
 
 
-else        if(playingPlayers[index].B===true && playingPlayers[index2].B===true) {
+else        if(playingPlayers[index].B===true && playingPlayers[index2].B===true &&(playingPlayers[index].C!==true)) {
+
+
+            var quer = "SELECT* FROM Questions ORDER BY RANDOM() LIMIT 1 ";
+
+
+            db.all(quer, [],function (err, rows) {
+
+
+                var object = {
+                    question: rows[0].Question, A: rows[0].A,
+                    B: rows[0].B, C: rows[0].C,
+                    D: rows[0].D, yourScore: playingPlayers[index].score,
+                    hisScore: playingPlayers[index2].score
+
+                };
+                var object2 = {
+                    question: rows[0].Question, A: rows[0].A,
+                    B: rows[0].B, C: rows[0].C,
+                    D: rows[0].D, yourScore: playingPlayers[index2].score,
+                    hisScore: playingPlayers[index].score
+                };
+
+                playingPlayers[index2].answer = rows[0].ANSWER;
+                playingPlayers[index].answer = rows[0].ANSWER;
+
+                playingPlayers[index].emit('next', object);
+                playingPlayers[index2].emit('next', object2);
+
+            })
+
+
 
         }
 
-     else   if(playingPlayers[index].A===true && playingPlayers[index2].A===true) {
+     else   if(playingPlayers[index].A===true && playingPlayers[index2].A===true &&(playingPlayers[index].B!==true)) {
+
+            var quer = "SELECT* FROM Questions ORDER BY RANDOM() LIMIT 1 ";
+
+
+            db.all(quer, [],function (err, rows) {
+
+
+                var object = {
+                    question: rows[0].Question, A: rows[0].A,
+                    B: rows[0].B, C: rows[0].C,
+                    D: rows[0].D, yourScore: playingPlayers[index].score,
+                    hisScore: playingPlayers[index2].score
+
+                };
+                var object2 = {
+                    question: rows[0].Question, A: rows[0].A,
+                    B: rows[0].B, C: rows[0].C,
+                    D: rows[0].D, yourScore: playingPlayers[index2].score,
+                    hisScore: playingPlayers[index].score
+                };
+
+                playingPlayers[index2].answer = rows[0].ANSWER;
+                playingPlayers[index].answer = rows[0].ANSWER;
+
+                playingPlayers[index].emit('next', object);
+                playingPlayers[index2].emit('next', object2);
+
+            })
+
+
 
         }
 
