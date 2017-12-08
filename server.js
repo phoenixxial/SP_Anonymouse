@@ -41,6 +41,12 @@ connections = [];
 app.post('/new',function (req,res) {
 
  {
+
+     var cookies = cookie.parse(req.headers.cookie);
+
+     if(cookies.token === undefined || cookies.token ==="") {
+         return res.sendFile(__dirname+'/login.html')
+     }
     var{quest,A,B,C,D,ans} = req.body;
 
     var query = "INSERT INTO QUESTIONS VALUES (?,?,?,?,?,?)";
@@ -99,7 +105,7 @@ app.get('/history', function(req, res) {
     var cookies = cookie.parse(req.headers.cookie);
 
     if (cookies.token === undefined) {
-        return res.sendFile(__dirname + '/login.html')
+        return res.sendFile(__dirname + '/login')
     }
 
     else {
@@ -123,7 +129,7 @@ app.get('/history', function(req, res) {
 app.get('/client', function(req, res){
     var cookies = cookie.parse(req.headers.cookie);
 
-    if(cookies.token === undefined) {
+    if(cookies.token === undefined || cookies.token ==="") {
         return res.sendFile(__dirname+'/login.html')
     }
     else {
@@ -135,7 +141,7 @@ app.get('/client', function(req, res){
 });
 
 
-app.get('/stats.html',function (req,res) {
+app.get('/stats',function (req,res) {
 
 
     var cookies = cookie.parse(req.headers.cookie);
@@ -631,7 +637,7 @@ function checkToken(token,res,stringa) {
 
             }
             else{
-                return res.sendFile(__dirname + './')
+                return res.sendFile(__dirname + '/login.html')
             }
         })
 
